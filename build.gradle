@@ -1,0 +1,30 @@
+group 'com.omerucel'
+version '1.0'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Project Jar', 'Implementation-Version': version
+    }
+    baseName = project.name + '-all'
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    with jar
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile "com.sparkjava:spark-core:2.5.4"
+    compile 'org.slf4j:slf4j-simple:1.7.21'
+    compile 'com.mitchellbosecke:pebble:2.1.0'
+}
